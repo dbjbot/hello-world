@@ -1,0 +1,511 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mule-configuration xmlns="http://www.mulesoft.com/tooling/messageflow" name="xero-adapter">
+    <global-element name="Xero" type="http://www.mulesoft.org/schema/mule/xero/config" entity-id="Xero#1">
+        <properties>
+            <property name="privateKeyFile" value="${xero.privateKeyFile}"/>
+            <property name="consumerKey" value="${xero.consumerKey}"/>
+            <property name="name" value="Xero"/>
+            <property name="auxiliary;index" value="1"/>
+            <property name="xeroApiUrl" value="${xero.xeroApiUrl}"/>
+            <property name="consumerSecret" value="${xero.consumerSecret}"/>
+        </properties>
+    </global-element>
+    <global-element name="JAXB Context" type="http://www.mulesoft.org/schema/mule/xml/jaxb-context" entity-id="JAXB Context#1">
+        <properties>
+            <property name="name" value="xeroJaxb"/>
+            <property name="packageNames" value="au.com.sixtree.mule.modules.xero.xsd"/>
+            <property name="auxiliary;index" value="2"/>
+        </properties>
+    </global-element>
+    <global-element name="HTTP\HTTPS" type="org.mule.tooling.ui.modules.core.global.httpConnector" entity-id="HTTP\HTTPS#1">
+        <properties>
+            <property name="proxyUsername"/>
+            <property name="reuseAddress"/>
+            <property name="receiveBacklog" value="0"/>
+            <property name="enableCookies" value="true"/>
+            <property name="serverSoTimeout" value="10000"/>
+            <property name="socketSoLinger" value="0"/>
+            <property name="clientSoTimeout" value="10000"/>
+            <property name="validateConnections" value="true"/>
+            <property name="keepAlive"/>
+            <property name="label"/>
+            <property name="sendTcpNoDelay"/>
+            <property name="proxyPort"/>
+            <property name="cookieSpec" value="netscape"/>
+            <property name="dispatcherPoolFactory-ref"/>
+            <property name="proxyHostname"/>
+            <property name="receiveBufferSize" value="0"/>
+            <property name="name" value="HTTP"/>
+            <property name="keepSendSocketOpen"/>
+            <property name="dynamicNotification"/>
+            <property name="sendBufferSize" value="0"/>
+            <property name="auxiliary;index" value="3"/>
+            <property name="proxyPassword"/>
+        </properties>
+    </global-element>
+    <flow SubFlow="false" name="xero" type="http://www.mulesoft.org/schema/mule/core/flow" entity-id="aa7d0e36-13d7-4da6-b187-e9c12f7491eb">
+        <properties>
+            <property name="initialState"/>
+            <property name="processingStrategy2"/>
+            <property name="processingStrategy"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property name="auxiliary;index" value="5"/>
+        </properties>
+        <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#1">
+            <graphicalData x="0" y="0" width="0" height="0"/>
+            <endpoint direction="Inbound" message-exchange-pattern="RequestResponse" name="HTTP" type="http://www.mulesoft.org/schema/mule/http/endpoint" entity-id="HTTP#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="port" value="${app.port}"/>
+                    <property name="host" value="localhost"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="followRedirects"/>
+                    <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/http/endpoint"/>
+                    <property name="keep-alive"/>
+                    <property name="contentType"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="password"/>
+                    <property name="exchange-pattern" value="request-response"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="httpLabel"/>
+                    <property name="address"/>
+                    <property name="path" value="xero"/>
+                    <property name="encoding"/>
+                    <property name="responseTransformer-refs"/>
+                    <property name="method"/>
+                    <property name="user"/>
+                    <property name="auxiliary;index" value="6"/>
+                    <property name="responseTimeout"/>
+                    <property name="mimeType"/>
+                    <property name="connector-ref"/>
+                </properties>
+            </endpoint>
+            <splitter index="9" name="Choice" type="org.mule.tooling.ui.modules.core.pattern.cbr" entity-id="Choice#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property-collection name="881db3a2-a43b-4cd7-8894-edc5e0bb49c6">
+                        <property name="choice.expression" value="message.inboundProperties['http.relative.path'] == 'items/sale'"/>
+                        <property-collection name="choice.attributes">
+                            <property name="expression" value="message.inboundProperties['http.relative.path'] == 'items/sale'"/>
+                        </property-collection>
+                    </property-collection>
+                    <property-collection name="5e2a9e9c-f8e4-4f21-bbaf-f22321dd575f">
+                        <property name="choice.expression" value="message.inboundProperties['http.relative.path'] == 'invoice'"/>
+                        <property-collection name="choice.attributes">
+                            <property name="expression" value="message.inboundProperties['http.relative.path'] == 'invoice'"/>
+                        </property-collection>
+                    </property-collection>
+                    <property-collection name="9a7366fd-e89f-4594-9a02-576324bf785b">
+                        <property name="choice.expression" value="message.inboundProperties['http.relative.path'] == 'customers'"/>
+                        <property-collection name="choice.attributes">
+                            <property name="expression" value="message.inboundProperties['http.relative.path'] == 'customers'"/>
+                        </property-collection>
+                    </property-collection>
+                    <property-collection name="bb48b513-77a3-44f1-aefd-8cd74dda3a24">
+                        <property name="choice.expression" value="message.inboundProperties['http.relative.path'] == 'invoice/new'"/>
+                        <property-collection name="choice.attributes">
+                            <property name="expression" value="message.inboundProperties['http.relative.path'] == 'invoice/new'"/>
+                        </property-collection>
+                    </property-collection>
+                    <property-collection name="1436b549-0cd5-4546-b0bb-b545fad3ac2a">
+                        <property name="choice.expression" value="message.inboundProperties['http.relative.path'] == 'invoices'"/>
+                        <property-collection name="choice.attributes">
+                            <property name="expression" value="message.inboundProperties['http.relative.path'] == 'invoices'"/>
+                        </property-collection>
+                    </property-collection>
+                    <property-collection name="9f689467-e159-41a4-95c2-cea6bd1fa5bb">
+                        <property name="choice.otherwise" value="true"/>
+                        <property-collection name="choice.attributes"/>
+                    </property-collection>
+                </properties>
+                <pattern name="Choice" type="org.mule.tooling.ui.modules.core.pattern.cbr" entity-id="Choice#2"/>
+                <compartment entity-id="compartment#1">
+                    <lane hadOnlyOneElement="false" index="11" isChoiceOtherwiseLane="false" entity-id="9a7366fd-e89f-4594-9a02-576324bf785b">
+                        <pattern name="Get Customers" type="http://www.mulesoft.org/schema/mule/core/flow-ref" entity-id="Flow Reference#1">
+                            <graphicalData x="0" y="0" width="0" height="0"/>
+                            <properties>
+<property name="name" value="xero-getCustomers"/>
+<property name="auxiliary;index" value="11"/>
+                            </properties>
+                        </pattern>
+                    </lane>
+                    <lane hadOnlyOneElement="false" index="13" isChoiceOtherwiseLane="false" entity-id="1436b549-0cd5-4546-b0bb-b545fad3ac2a">
+                        <pattern name="Get Invoices for Customer" type="http://www.mulesoft.org/schema/mule/core/flow-ref" entity-id="Flow Reference#2">
+                            <graphicalData x="0" y="0" width="0" height="0"/>
+                            <properties>
+<property name="name" value="xero-getInvoicesForCustomer"/>
+<property name="auxiliary;index" value="13"/>
+                            </properties>
+                        </pattern>
+                    </lane>
+                    <lane hadOnlyOneElement="false" index="15" isChoiceOtherwiseLane="false" entity-id="bb48b513-77a3-44f1-aefd-8cd74dda3a24">
+                        <pattern name="Create Invoice" type="http://www.mulesoft.org/schema/mule/core/flow-ref" entity-id="Flow Reference#3">
+                            <graphicalData x="0" y="0" width="0" height="0"/>
+                            <properties>
+<property name="name" value="xero-createInvoice"/>
+<property name="auxiliary;index" value="15"/>
+                            </properties>
+                        </pattern>
+                    </lane>
+                    <lane hadOnlyOneElement="false" index="17" isChoiceOtherwiseLane="false" entity-id="5e2a9e9c-f8e4-4f21-bbaf-f22321dd575f">
+                        <pattern name="Get Invoice" type="http://www.mulesoft.org/schema/mule/core/flow-ref" entity-id="Flow Reference#4">
+                            <graphicalData x="0" y="0" width="0" height="0"/>
+                            <properties>
+<property name="name" value="xero-getInvoice"/>
+<property name="auxiliary;index" value="17"/>
+                            </properties>
+                        </pattern>
+                    </lane>
+                    <lane hadOnlyOneElement="false" index="19" isChoiceOtherwiseLane="false" entity-id="881db3a2-a43b-4cd7-8894-edc5e0bb49c6">
+                        <pattern name="Get Items for Sale" type="http://www.mulesoft.org/schema/mule/core/flow-ref" entity-id="Flow Reference#5">
+                            <graphicalData x="0" y="0" width="0" height="0"/>
+                            <properties>
+<property name="name" value="xero-getSaleItems"/>
+<property name="auxiliary;index" value="19"/>
+                            </properties>
+                        </pattern>
+                    </lane>
+                    <lane hadOnlyOneElement="false" index="21" isChoiceOtherwiseLane="true" entity-id="9f689467-e159-41a4-95c2-cea6bd1fa5bb">
+                        <pattern name="Expression" type="http://www.mulesoft.org/schema/mule/core/expression-transformer" entity-id="Expression#1">
+                            <graphicalData x="0" y="0" width="0" height="0"/>
+                            <properties>
+<property name="expression" value="#[['error': 'Unknown path']]"/>
+<property name="returnClass"/>
+<property name="ignoreBadInput"/>
+<property name="returnSourceIfNull"/>
+<property name="name"/>
+<property name="custom-evaluator"/>
+<property name="encoding"/>
+<property name="evaluator"/>
+<property name="auxiliary;index" value="21"/>
+<property name="mimeType"/>
+                            </properties>
+                        </pattern>
+                    </lane>
+                </compartment>
+            </splitter>
+            <pattern name="Restore Exception if Possible" type="http://www.mulesoft.org/schema/mule/core/expression-transformer" entity-id="Expression#2">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="expression" value="#[sessionVars['apiException'] == null ? message.payload : sessionVars['apiException']]"/>
+                    <property name="returnClass"/>
+                    <property name="ignoreBadInput"/>
+                    <property name="returnSourceIfNull" value="true"/>
+                    <property name="name"/>
+                    <property name="custom-evaluator"/>
+                    <property name="encoding"/>
+                    <property name="evaluator"/>
+                    <property name="auxiliary;index" value="22"/>
+                    <property name="mimeType"/>
+                </properties>
+            </pattern>
+        </lane>
+    </flow>
+    <flow SubFlow="true" name="xero-getCustomers" type="http://www.mulesoft.org/schema/mule/core/subflow" entity-id="9405bc66-7493-4f6e-916c-481fc87bd31d">
+        <properties>
+            <property name="initialState"/>
+            <property name="processingStrategy2"/>
+            <property name="processingStrategy"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property name="auxiliary;index" value="23"/>
+        </properties>
+        <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#2">
+            <graphicalData x="0" y="0" width="0" height="0"/>
+            <pattern name="Xero" type="http://www.mulesoft.org/schema/mule/xero/xero-connector" entity-id="Xero#2">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="contactId"/>
+                    <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/xero/get-contact"/>
+                    <property name="config-ref" value="Xero"/>
+                    <property name="auxiliary;index" value="24"/>
+                </properties>
+            </pattern>
+            <pattern name="Drop Exceptions" type="http://www.mulesoft.org/schema/mule/core/message-filter" entity-id="Message#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="onUnaccepted" value="droppedMessageFlow"/>
+                    <property name="throwOnUnaccepted"/>
+                    <property name="auxiliary;index" value="25"/>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/core/expression-filter;0">
+                        <property name="expression" value="#[xpath('/ApiException') == null]"/>
+                        <property name="auxiliary;index" value="26"/>
+                        <property name="auxiliary;wrapIn" value="26"/>
+                    </property-collection>
+                </properties>
+            </pattern>
+            <unknown description="false" index="27" entity-id="unknown#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <content>&lt;auto-transformer xmlns=&quot;http://www.mulesoft.org/schema/mule/core&quot; returnClass=&quot;au.com.sixtree.mule.modules.xero.xsd.ResponseType&quot;/&gt;</content>
+            </unknown>
+            <pattern name="Expression" type="http://www.mulesoft.org/schema/mule/core/expression-transformer" entity-id="Expression#3">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="expression" value="#[([&#xA;&quot;contactID&quot;: $.contactID, &#xA;&quot;name&quot;: $.name&#xA;] in payload.contacts.contact)]"/>
+                    <property name="returnClass"/>
+                    <property name="ignoreBadInput"/>
+                    <property name="returnSourceIfNull"/>
+                    <property name="name"/>
+                    <property name="custom-evaluator"/>
+                    <property name="encoding"/>
+                    <property name="evaluator"/>
+                    <property name="auxiliary;index" value="28"/>
+                    <property name="mimeType"/>
+                </properties>
+            </pattern>
+        </lane>
+    </flow>
+    <flow SubFlow="true" name="xero-getInvoicesForCustomer" type="http://www.mulesoft.org/schema/mule/core/subflow" entity-id="1af56f78-3754-42da-8084-5d90f9499d7e">
+        <properties>
+            <property name="initialState"/>
+            <property name="processingStrategy2"/>
+            <property name="processingStrategy"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property name="auxiliary;index" value="29"/>
+        </properties>
+        <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#3">
+            <graphicalData x="0" y="0" width="0" height="0"/>
+            <pattern name="Xero" type="http://www.mulesoft.org/schema/mule/xero/xero-connector" entity-id="Xero#3">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="whereClause" value="Contact.ContactID == Guid(&quot;#[header:inbound:contactID]&quot;) AND Type == &quot;ACCREC&quot; AND Status != &quot;DELETED&quot;"/>
+                    <property name="orderBy"/>
+                    <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/xero/get-invoices-list"/>
+                    <property name="config-ref" value="Xero"/>
+                    <property name="auxiliary;index" value="30"/>
+                </properties>
+            </pattern>
+            <pattern name="Drop Exceptions" type="http://www.mulesoft.org/schema/mule/core/message-filter" entity-id="Message#2">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="onUnaccepted" value="droppedMessageFlow"/>
+                    <property name="throwOnUnaccepted"/>
+                    <property name="auxiliary;index" value="31"/>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/core/expression-filter;0">
+                        <property name="expression" value="#[xpath('/ApiException') == null]"/>
+                        <property name="auxiliary;index" value="32"/>
+                        <property name="auxiliary;wrapIn" value="32"/>
+                    </property-collection>
+                </properties>
+            </pattern>
+            <unknown description="false" index="33" entity-id="unknown#2">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <content>&lt;auto-transformer xmlns=&quot;http://www.mulesoft.org/schema/mule/core&quot; returnClass=&quot;au.com.sixtree.mule.modules.xero.xsd.ResponseType&quot;/&gt;</content>
+            </unknown>
+            <pattern name="Expression" type="http://www.mulesoft.org/schema/mule/core/expression-transformer" entity-id="Expression#4">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="expression" value="#[&#xA;([&#xA;&quot;invoiceID&quot;: $.invoiceID, &#xA;&quot;invoiceNumber&quot;: $.invoiceNumber,&#xA;&quot;status&quot;: $.status,&#xA;&quot;reference&quot;: $.reference,&#xA;&quot;date&quot;: $.date&#xA;] in (payload.?invoices != null ? payload.invoices.invoice : []));&#xA;]"/>
+                    <property name="returnClass"/>
+                    <property name="ignoreBadInput"/>
+                    <property name="returnSourceIfNull"/>
+                    <property name="name"/>
+                    <property name="custom-evaluator"/>
+                    <property name="encoding"/>
+                    <property name="evaluator"/>
+                    <property name="auxiliary;index" value="34"/>
+                    <property name="mimeType"/>
+                </properties>
+            </pattern>
+        </lane>
+    </flow>
+    <flow SubFlow="true" name="xero-getInvoice" type="http://www.mulesoft.org/schema/mule/core/subflow" entity-id="acac3066-f75d-443e-8e7a-36299c5e3d91">
+        <properties>
+            <property name="initialState"/>
+            <property name="processingStrategy2"/>
+            <property name="processingStrategy"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property name="auxiliary;index" value="35"/>
+        </properties>
+        <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#4">
+            <graphicalData x="0" y="0" width="0" height="0"/>
+            <pattern name="Xero" type="http://www.mulesoft.org/schema/mule/xero/xero-connector" entity-id="Xero#4">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="invoiceId" value="#[header:inbound:invoiceNumber]"/>
+                    <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/xero/get-invoice"/>
+                    <property name="config-ref" value="Xero"/>
+                    <property name="auxiliary;index" value="36"/>
+                </properties>
+            </pattern>
+            <pattern name="Drop Exceptions" type="http://www.mulesoft.org/schema/mule/core/message-filter" entity-id="Message#3">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="onUnaccepted" value="droppedMessageFlow"/>
+                    <property name="throwOnUnaccepted"/>
+                    <property name="auxiliary;index" value="37"/>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/core/expression-filter;0">
+                        <property name="expression" value="#[xpath('/ApiException') == null]"/>
+                        <property name="auxiliary;index" value="38"/>
+                        <property name="auxiliary;wrapIn" value="38"/>
+                    </property-collection>
+                </properties>
+            </pattern>
+            <unknown description="false" index="39" entity-id="unknown#3">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <content>&lt;auto-transformer xmlns=&quot;http://www.mulesoft.org/schema/mule/core&quot; returnClass=&quot;au.com.sixtree.mule.modules.xero.xsd.ResponseType&quot;/&gt;</content>
+            </unknown>
+            <pattern name="Expression" type="http://www.mulesoft.org/schema/mule/core/expression-transformer" entity-id="Expression#5">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="expression" value="#[&#xA;invoice = payload.invoices.invoice[0];&#xA;[&#xA;&quot;invoiceID&quot;: invoice.invoiceID, &#xA;&quot;invoiceNumber&quot;: invoice.invoiceNumber,&#xA;&quot;status&quot;: invoice.status,&#xA;&quot;date&quot;: invoice.date,&#xA;&quot;reference&quot;: invoice.reference,&#xA;&quot;lineItems&quot;:&#xA;    ([&#xA;    &quot;description&quot;: $.description, &#xA;    &quot;unitAmount&quot;: $.unitAmount,&#xA;    &quot;itemCode&quot;: $.itemCode,&#xA;    &quot;accountCode&quot;: $.accountCode&#xA;    ] in invoice.lineItems.lineItem)&#xA;]&#xA;]"/>
+                    <property name="returnClass"/>
+                    <property name="ignoreBadInput"/>
+                    <property name="returnSourceIfNull"/>
+                    <property name="name"/>
+                    <property name="custom-evaluator"/>
+                    <property name="encoding"/>
+                    <property name="evaluator"/>
+                    <property name="auxiliary;index" value="40"/>
+                    <property name="mimeType"/>
+                </properties>
+            </pattern>
+        </lane>
+    </flow>
+    <flow SubFlow="true" name="xero-createInvoice" type="http://www.mulesoft.org/schema/mule/core/subflow" entity-id="52c3f291-a023-445a-b027-1fb44efb59f1">
+        <properties>
+            <property name="initialState"/>
+            <property name="processingStrategy2"/>
+            <property name="processingStrategy"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property name="auxiliary;index" value="41"/>
+        </properties>
+        <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#5">
+            <graphicalData x="0" y="0" width="0" height="0"/>
+            <unknown description="false" index="42" entity-id="unknown#4">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <content>&lt;json:json-to-xml-transformer xmlns:json=&quot;http://www.mulesoft.org/schema/mule/json&quot; xmlns:doc=&quot;http://www.mulesoft.org/schema/mule/documentation&quot; doc:name=&quot;JSON to XML&quot;/&gt;</content>
+            </unknown>
+            <pattern name="Xero" type="http://www.mulesoft.org/schema/mule/xero/xero-connector" entity-id="Xero#5">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/xero/create"/>
+                    <property name="payload"/>
+                    <property name="objectType" value="Invoices"/>
+                    <property name="config-ref" value="Xero"/>
+                    <property name="auxiliary;index" value="43"/>
+                </properties>
+            </pattern>
+            <pattern name="Drop Exceptions" type="http://www.mulesoft.org/schema/mule/core/message-filter" entity-id="Message#4">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="onUnaccepted" value="droppedMessageFlow"/>
+                    <property name="throwOnUnaccepted"/>
+                    <property name="auxiliary;index" value="44"/>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/core/expression-filter;0">
+                        <property name="expression" value="#[xpath('/ApiException') == null]"/>
+                        <property name="auxiliary;index" value="45"/>
+                        <property name="auxiliary;wrapIn" value="45"/>
+                    </property-collection>
+                </properties>
+            </pattern>
+            <unknown description="false" index="46" entity-id="unknown#5">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <content>&lt;auto-transformer xmlns=&quot;http://www.mulesoft.org/schema/mule/core&quot; returnClass=&quot;au.com.sixtree.mule.modules.xero.xsd.ResponseType&quot;/&gt;</content>
+            </unknown>
+            <pattern name="Expression" type="http://www.mulesoft.org/schema/mule/core/expression-transformer" entity-id="Expression#6">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="expression" value="#[&#xA;invoice = payload.invoices.invoice[0];&#xA;[&#xA;&quot;invoiceID&quot;: invoice.invoiceID, &#xA;&quot;invoiceNumber&quot;: invoice.invoiceNumber,&#xA;&quot;status&quot;: invoice.status,&#xA;&quot;date&quot;: invoice.date&#xA;]&#xA;]"/>
+                    <property name="returnClass"/>
+                    <property name="ignoreBadInput"/>
+                    <property name="returnSourceIfNull"/>
+                    <property name="name"/>
+                    <property name="custom-evaluator"/>
+                    <property name="encoding"/>
+                    <property name="evaluator"/>
+                    <property name="auxiliary;index" value="47"/>
+                    <property name="mimeType"/>
+                </properties>
+            </pattern>
+        </lane>
+    </flow>
+    <flow SubFlow="true" name="xero-getSaleItems" type="http://www.mulesoft.org/schema/mule/core/subflow" entity-id="805d682a-c1a1-4113-9fb7-4cc5636dc3c4">
+        <properties>
+            <property name="initialState"/>
+            <property name="processingStrategy2"/>
+            <property name="processingStrategy"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property name="auxiliary;index" value="48"/>
+        </properties>
+        <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#6">
+            <graphicalData x="0" y="0" width="0" height="0"/>
+            <pattern name="Xero" type="http://www.mulesoft.org/schema/mule/xero/xero-connector" entity-id="Xero#6">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="whereClause" value="SalesDetails.UnitPrice &gt;= 0"/>
+                    <property name="orderBy"/>
+                    <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/xero/get-items-list"/>
+                    <property name="config-ref" value="Xero"/>
+                    <property name="auxiliary;index" value="49"/>
+                </properties>
+            </pattern>
+            <pattern name="Drop Exceptions" type="http://www.mulesoft.org/schema/mule/core/message-filter" entity-id="Message#5">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="onUnaccepted" value="droppedMessageFlow"/>
+                    <property name="throwOnUnaccepted"/>
+                    <property name="auxiliary;index" value="50"/>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/core/expression-filter;0">
+                        <property name="expression" value="#[xpath('/ApiException') == null]"/>
+                        <property name="auxiliary;index" value="51"/>
+                        <property name="auxiliary;wrapIn" value="51"/>
+                    </property-collection>
+                </properties>
+            </pattern>
+            <unknown description="false" index="52" entity-id="unknown#6">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <content>&lt;auto-transformer xmlns=&quot;http://www.mulesoft.org/schema/mule/core&quot; returnClass=&quot;au.com.sixtree.mule.modules.xero.xsd.ResponseType&quot;/&gt;</content>
+            </unknown>
+            <pattern name="Expression" type="http://www.mulesoft.org/schema/mule/core/expression-transformer" entity-id="Expression#7">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="expression" value="#[([&#xA;&quot;code&quot;: $.code&#xA;] in payload.items.item)]"/>
+                    <property name="returnClass"/>
+                    <property name="ignoreBadInput"/>
+                    <property name="returnSourceIfNull"/>
+                    <property name="name"/>
+                    <property name="custom-evaluator"/>
+                    <property name="encoding"/>
+                    <property name="evaluator"/>
+                    <property name="auxiliary;index" value="53"/>
+                    <property name="mimeType"/>
+                </properties>
+            </pattern>
+        </lane>
+    </flow>
+    <flow SubFlow="false" name="droppedMessageFlow" type="http://www.mulesoft.org/schema/mule/core/flow" entity-id="c09abeb4-6f6d-4f57-9104-33fc704e2654">
+        <properties>
+            <property name="initialState"/>
+            <property name="processingStrategy2"/>
+            <property name="processingStrategy"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property name="auxiliary;index" value="54"/>
+        </properties>
+        <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#7">
+            <graphicalData x="0" y="0" width="0" height="0"/>
+            <unknown description="false" index="55" entity-id="unknown#7">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <content>&lt;json:xml-to-json-transformer xmlns:json=&quot;http://www.mulesoft.org/schema/mule/json&quot; xmlns:doc=&quot;http://www.mulesoft.org/schema/mule/documentation&quot; doc:name=&quot;XML to JSON&quot;/&gt;</content>
+            </unknown>
+            <pattern name="Save API Exception" type="http://www.mulesoft.org/schema/mule/core/session-variable-transformer" entity-id="Session Variable#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="variableName" value="apiException"/>
+                    <property name="value" value="#[message.payload]"/>
+                    <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/core/set-session-variable"/>
+                    <property name="auxiliary;index" value="56"/>
+                </properties>
+            </pattern>
+        </lane>
+    </flow>
+    <description></description>
+</mule-configuration>
