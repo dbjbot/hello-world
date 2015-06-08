@@ -1,0 +1,4 @@
+,,,TRM,EPIC
+student,varchar,10,x,x
+id,integer,5,,
+address,varchar,20,,
